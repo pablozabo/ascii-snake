@@ -1,0 +1,22 @@
+{
+	"editor.formatOnSave": true,
+	"C_Cpp.autocompleteAddParentheses": true,	
+	"clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe",
+	"C_Cpp.formatting": "clangFormat",
+	"files.associations": {
+		"curses.h": "c",
+		"locale.h": "c",
+		"algorithm": "c",
+		"array": "c",
+		"*.tcc": "c",
+		"stdbool.h": "c",
+		"stdlib.h": "c",
+		"screen_result.h": "c",
+		"time.h": "c",
+		"screen_init.h": "c",
+		"screens.h": "c",
+		"stdint.h": "c",
+		"stdint-gcc.h": "c",
+		"common.h": "c"
+	}
+}

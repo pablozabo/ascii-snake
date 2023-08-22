@@ -1,0 +1,13 @@
+Language: Cpp
+UseTab: true
+IndentWidth: 4
+TabWidth: 4
+AlignOperands: Align
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 0
+AllowAllParametersOfDeclarationOnNextLine: true
+Cpp11BracedListStyle: false
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true

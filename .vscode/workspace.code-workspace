@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"clang-format.executable": "C:/Program Files/LLVM/bin/clang-format.exe",
+		"files.associations": {
+			"word.h": "c"
+		}
+	}
+}
