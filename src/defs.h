@@ -28,14 +28,13 @@ typedef bool (*screen_is_completed_t)(void);
 #define HALF_SECONDS(ms) (ms / 500.0)
 #define QUARTER_SECONDS(ms) (ms / 250.0)
 
-#define FILE_SPLASH "assets/splash.txt"
-#define FILE_SCORE "score.txt"
-
 #define CH_SHAPE_FILL ACS_CKBOARD
 #define CH_EOL '\n'
 #define CH_EOS '\0'
 #define CH_ENTER 10
 #define CH_ESC 27
+
+#define FILE_SCORE "score.txt"
 
 typedef enum color_pair_t
 {
@@ -50,7 +49,6 @@ typedef struct score_t
 {
 	uint32_t current;
 	uint32_t record;
-	uint16_t current_iteration;
 } score_t;
 
 #endif

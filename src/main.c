@@ -5,6 +5,10 @@
 #define TERMINAL_COLS 100
 #define TERMINAL_ROWS 50
 
+#define FILE_SPLASH "assets/splash.txt"
+#define FILE_GAME_OVER "assets/game_over.txt"
+#define FILE_NEW_RECORD "assets/new_record.txt"
+
 typedef enum screen_t
 {
 	SCREEN_INIT	  = 1,
@@ -17,6 +21,8 @@ bool			g_running = true;
 int				g_key;
 const float32_t g_target_frame_time = 1000 / 30; // 30 FPS
 char		   *g_asset_splash		= NULL;
+char		   *g_asset_game_over	= NULL;
+char		   *g_asset_new_record	= NULL;
 score_t			g_score				= { .current = 0 };
 
 static screen_action_t		 screen_action_init	   = NULL;
@@ -31,6 +37,7 @@ static float32_t last_update_time = 0.0;
 static void init(void);
 static void dispose(void);
 static void load_assets(void);
+static void load_asset(const char *file, char **dest);
 static void load_score(void);
 static void update_state(void);
 static void loop(void);
@@ -79,6 +86,16 @@ static void dispose(void)
 	if (g_asset_splash)
 	{
 		free(g_asset_splash);
+	}
+
+	if (g_asset_game_over)
+	{
+		free(g_asset_game_over);
+	}
+
+	if (g_asset_new_record)
+	{
+		free(g_asset_new_record);
 	}
 
 	use_default_colors();
@@ -161,16 +178,23 @@ static void update_state(void)
 
 static void load_assets(void)
 {
-	FILE *f = fopen(FILE_SPLASH, "r");
+	load_asset(FILE_SPLASH, &g_asset_splash);
+	load_asset(FILE_GAME_OVER, &g_asset_game_over);
+	load_asset(FILE_NEW_RECORD, &g_asset_new_record);
+}
+
+static void load_asset(const char *file, char **dest)
+{
+	FILE *f = fopen(file, "r");
 	ASSERT(f);
 
 	fseek(f, 0, SEEK_END);
 	int32_t length = ftell(f) + 1;
 	fseek(f, 0, SEEK_SET);
-	g_asset_splash = calloc(length, sizeof(char));
-	ASSERT(g_asset_splash);
+	*dest = calloc(length, sizeof(char));
+	ASSERT(*dest);
 
-	fread(g_asset_splash, sizeof(char), length, f);
+	fread(*dest, sizeof(char), length, f);
 	fclose(f);
 }
 

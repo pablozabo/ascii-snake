@@ -121,7 +121,7 @@ static void check_eaten_fruits(void);
 static void check_collision(void);
 static void board_cell_pool_add(uint8_t x, uint8_t y);
 static void board_cell_pool_remove(uint8_t x, uint8_t y);
-static void update_score(void);
+static void save_score(void);
 static void render_board(void);
 static void render_snake(void);
 static void render_fruits(void);
@@ -131,7 +131,7 @@ void screen_game_init(void)
 {
 	uint8_t offset_y, offset_x;
 	srand(time(NULL));
-
+	g_score.current = 0;
 	// win init
 	set_offset_yx(win_board_height, win_board_width, &offset_y, &offset_x);
 	win_board = newwin(win_board_height, win_board_width, offset_y, offset_x);
@@ -190,6 +190,7 @@ void screen_game_init(void)
 
 void screen_game_dispose(void)
 {
+	save_score();
 	wclear(win_board);
 	wrefresh(win_board);
 	delwin(win_board);
@@ -228,14 +229,8 @@ void screen_game_update(void)
 		check_collision();
 
 		SET_BOARD_CELL_VAL(snake.head->curr_pos[0], snake.head->curr_pos[1], true);
-		g_score.current_iteration += points_movement;
+		g_score.current += points_movement;
 		snake.elapsed_time = 0;
-	}
-
-	if (g_score.current_iteration > 0)
-	{
-		update_score();
-		g_score.current_iteration = 0;
 	}
 }
 
@@ -376,7 +371,7 @@ static void check_eaten_fruits(void)
 			head_y == fruit->pos[1])
 		{
 			fruit->status = FRUIT_STATUS_EATEN;
-			g_score.current_iteration += points_fruit_eaten;
+			g_score.current += points_fruit_eaten;
 
 			if (snake.speed > snake.max_speed)
 			{
@@ -459,10 +454,8 @@ static void board_cell_pool_remove(uint8_t x, uint8_t y)
 	sparse_set_remove(&board_cell_pool.indexes, coord_index);
 }
 
-static void update_score(void)
+static void save_score(void)
 {
-	g_score.current += g_score.current_iteration;
-
 	if (g_score.current <= g_score.record)
 	{
 		return;
