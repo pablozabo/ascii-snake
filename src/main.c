@@ -21,7 +21,6 @@ int				g_key;
 const float32_t g_target_frame_time = 1000 / 30; // 30 FPS
 char		   *g_asset_splash		= NULL;
 char		   *g_asset_game_over	= NULL;
-char		   *g_asset_new_record	= NULL;
 score_t			g_score				= { .current = 0 };
 
 static screen_action_t		 screen_action_init			  = NULL;
