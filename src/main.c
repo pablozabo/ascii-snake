@@ -7,7 +7,6 @@
 
 #define FILE_SPLASH "assets/splash.txt"
 #define FILE_GAME_OVER "assets/game_over.txt"
-#define FILE_NEW_RECORD "assets/new_record.txt"
 
 typedef enum screen_t
 {
@@ -92,11 +91,6 @@ static void dispose(void)
 	if (g_asset_game_over)
 	{
 		free(g_asset_game_over);
-	}
-
-	if (g_asset_new_record)
-	{
-		free(g_asset_new_record);
 	}
 
 	use_default_colors();
@@ -189,7 +183,6 @@ static void load_assets(void)
 {
 	load_asset(FILE_SPLASH, &g_asset_splash);
 	load_asset(FILE_GAME_OVER, &g_asset_game_over);
-	load_asset(FILE_NEW_RECORD, &g_asset_new_record);
 }
 
 static void load_asset(const char *file, char **dest)
