@@ -2,7 +2,6 @@
 #include "../common.h"
 #include "../data_structures/data_structures.h"
 
-extern bool			   g_running;
 extern int			   g_key;
 extern score_t		   g_score;
 extern const float32_t g_target_frame_time;
