@@ -25,12 +25,13 @@ char		   *g_asset_game_over	= NULL;
 char		   *g_asset_new_record	= NULL;
 score_t			g_score				= { .current = 0 };
 
-static screen_action_t		 screen_action_init	   = NULL;
-static screen_action_t		 screen_action_dispose = NULL;
-static screen_action_t		 screen_action_update  = NULL;
-static screen_action_t		 screen_action_render  = NULL;
-static screen_is_completed_t screen_is_completed   = NULL;
-static screen_t				 current_screen		   = 0;
+static screen_action_t		 screen_action_init			  = NULL;
+static screen_action_t		 screen_action_dispose		  = NULL;
+static screen_action_t		 screen_action_update		  = NULL;
+static screen_action_t		 screen_action_render		  = NULL;
+static screen_is_completed_t screen_is_completed		  = NULL;
+static screen_action_t		 screen_action_window_resized = NULL;
+static screen_t				 current_screen				  = 0;
 
 static float32_t last_update_time = 0.0;
 
@@ -119,6 +120,11 @@ static void loop(void)
 			cbreak();
 			curs_set(0);
 			refresh();
+
+			if (screen_action_window_resized)
+			{
+				screen_action_window_resized();
+			}
 		}
 
 		float32_t real_delta_time = CURRENT_TIME - last_update_time;
@@ -144,33 +150,36 @@ static void update_state(void)
 {
 	if (!current_screen)
 	{
-		screen_action_init	  = &screen_init_init;
-		screen_action_dispose = &screen_init_dispose;
-		screen_action_update  = &screen_init_update;
-		screen_action_render  = &screen_init_render;
-		screen_is_completed	  = &screen_init_is_completed;
+		screen_action_init			 = &screen_init_init;
+		screen_action_dispose		 = &screen_init_dispose;
+		screen_action_update		 = &screen_init_update;
+		screen_action_render		 = &screen_init_render;
+		screen_is_completed			 = &screen_init_is_completed;
+		screen_action_window_resized = &screen_init_window_resized;
 		screen_action_init();
 		current_screen = SCREEN_INIT;
 	}
 	else if ((current_screen == SCREEN_INIT || current_screen == SCREEN_RESULT) && screen_is_completed())
 	{
 		screen_action_dispose();
-		screen_action_init	  = &screen_game_init;
-		screen_action_dispose = &screen_game_dispose;
-		screen_action_update  = &screen_game_update;
-		screen_action_render  = &screen_game_render;
-		screen_is_completed	  = &screen_game_is_completed;
+		screen_action_init			 = &screen_game_init;
+		screen_action_dispose		 = &screen_game_dispose;
+		screen_action_update		 = &screen_game_update;
+		screen_action_render		 = &screen_game_render;
+		screen_is_completed			 = &screen_game_is_completed;
+		screen_action_window_resized = NULL;
 		screen_action_init();
 		current_screen = SCREEN_GAME;
 	}
 	else if (current_screen == SCREEN_GAME && screen_is_completed())
 	{
 		screen_action_dispose();
-		screen_action_init	  = &screen_result_init;
-		screen_action_dispose = &screen_result_dispose;
-		screen_action_update  = &screen_result_update;
-		screen_action_render  = &screen_result_render;
-		screen_is_completed	  = &screen_result_is_completed;
+		screen_action_init			 = &screen_result_init;
+		screen_action_dispose		 = &screen_result_dispose;
+		screen_action_update		 = &screen_result_update;
+		screen_action_render		 = &screen_result_render;
+		screen_is_completed			 = &screen_result_is_completed;
+		screen_action_window_resized = NULL;
 		screen_action_init();
 		current_screen = SCREEN_RESULT;
 	}

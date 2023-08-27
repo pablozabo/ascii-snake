@@ -8,5 +8,6 @@ void screen_init_dispose(void);
 bool screen_init_is_completed(void);
 void screen_init_update(void);
 void screen_init_render(void);
+void screen_init_window_resized(void);
 
 #endif

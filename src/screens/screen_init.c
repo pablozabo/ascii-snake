@@ -69,11 +69,11 @@ void screen_init_render(void)
 	}
 
 	wrefresh(win_actions);
+}
 
-	if (g_key == KEY_RESIZE)
-	{
-		render_splash();
-	}
+void screen_init_window_resized(void)
+{
+	render_splash();
 }
 
 static void render_splash(void)
