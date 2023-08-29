@@ -73,9 +73,9 @@ static void init(void)
 	init_pair(COLOR_PAIR_RED_BK, COLOR_WHITE, COLOR_RED);
 	init_pair(COLOR_PAIR_GREEN, COLOR_GREEN, COLOR_BLACK);
 
-	init_color(COLOR_PAIR_RED, 1000, 0, 0);
-	init_color(COLOR_PAIR_GREEN, 0, 700, 0);
-	init_color(COLOR_PAIR_BLUE, 0, 0, 700);
+	init_color(COLOR_RED, 1000, 0, 0);
+	init_color(COLOR_GREEN, 0, 700, 0);
+	init_color(COLOR_BLUE, 0, 0, 700);
 
 	refresh();
 }
