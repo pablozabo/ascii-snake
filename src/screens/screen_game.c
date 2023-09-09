@@ -345,10 +345,10 @@ static void update_fruit_pool(void)
 				uint16_t index = rand() % available_cells_length;
 				vec2_t	*cell  = (board_cell_pool.cells + index);
 
-				fruit->pos.x = (*cell).x;
-				fruit->pos.y = (*cell).y;
+				fruit->pos.x = cell->x;
+				fruit->pos.y = cell->y;
 
-				board_cell_pool_remove((*cell).x, (*cell).y);
+				board_cell_pool_remove(cell->x, cell->y);
 			}
 		}
 	}
@@ -422,8 +422,8 @@ static void board_cell_pool_add(uint8_t x, uint8_t y)
 	uint16_t available_cells_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
 	vec2_t	*cell					= (board_cell_pool.cells + available_cells_length - 1);
 
-	(*cell).x = x;
-	(*cell).y = y;
+	cell->x = x;
+	cell->y = y;
 }
 
 static void board_cell_pool_remove(uint8_t x, uint8_t y)
@@ -448,8 +448,8 @@ static void board_cell_pool_remove(uint8_t x, uint8_t y)
 	vec2_t	*cell_origin			= (board_cell_pool.cells + available_cells_length - 1);
 	vec2_t	*cell_dest				= (board_cell_pool.cells + index);
 
-	(*cell_dest).x = (*cell_origin).x;
-	(*cell_dest).y = (*cell_origin).y;
+	cell_dest->x = cell_origin->x;
+	cell_dest->y = cell_origin->y;
 	sparse_set_remove(&board_cell_pool.indexes, coord_index);
 }
 
