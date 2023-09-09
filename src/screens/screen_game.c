@@ -169,8 +169,8 @@ void screen_game_init(void)
 			uint16_t index = COORDS_TO_INDEX(x, y);
 			sparse_set_add(&board_cell_pool.indexes, index);
 			vec2_t *cell = (board_cell_pool.cells + index);
-			(*cell)[0]	 = x;
-			(*cell)[1]	 = y;
+			(*cell).x	 = x;
+			(*cell).y	 = y;
 		}
 	}
 
@@ -179,9 +179,9 @@ void screen_game_init(void)
 	fruit_pool.fruits = calloc(sizeof(fruit_t), fruit_pool.length);
 	ASSERT(fruit_pool.fruits);
 
-	snake.head->curr_pos[0] = win_board_height * 0.5;
-	snake.head->curr_pos[1] = win_board_height * 0.5;
-	SET_BOARD_CELL_VAL(snake.head->curr_pos[0], snake.head->curr_pos[1], true);
+	snake.head->curr_pos.x = win_board_height * 0.5;
+	snake.head->curr_pos.y = win_board_height * 0.5;
+	SET_BOARD_CELL_VAL(snake.head->curr_pos.x, snake.head->curr_pos.y, true);
 
 	render_score();
 	render_board();
@@ -227,7 +227,7 @@ void screen_game_update(void)
 		check_eaten_fruits();
 		check_collision();
 
-		SET_BOARD_CELL_VAL(snake.head->curr_pos[0], snake.head->curr_pos[1], true);
+		SET_BOARD_CELL_VAL(snake.head->curr_pos.x, snake.head->curr_pos.y, true);
 		g_score.current += points_movement;
 		snake.elapsed_time = 0;
 	}
@@ -273,16 +273,16 @@ static void handle_input(void)
 
 static void move_snake()
 {
-	SET_BOARD_CELL_VAL(snake.tail->curr_pos[0], snake.tail->curr_pos[1], false);
-	snake.tail->prev_pos[0] = snake.head->curr_pos[0];
-	snake.tail->prev_pos[1] = snake.head->curr_pos[1];
+	SET_BOARD_CELL_VAL(snake.tail->curr_pos.x, snake.tail->curr_pos.y, false);
+	snake.tail->prev_pos.x = snake.head->curr_pos.x;
+	snake.tail->prev_pos.y = snake.head->curr_pos.y;
 
 	// just move the tail to the front (head)
 	if (snake.length > 1)
 	{
-		snake_node_t *new_tail	= snake.tail->prev_node;
-		snake.tail->curr_pos[0] = snake.head->curr_pos[0];
-		snake.tail->curr_pos[1] = snake.head->curr_pos[1];
+		snake_node_t *new_tail = snake.tail->prev_node;
+		snake.tail->curr_pos.x = snake.head->curr_pos.x;
+		snake.tail->curr_pos.y = snake.head->curr_pos.y;
 
 		snake.head->prev_node			 = snake.tail;
 		snake.tail->next_node			 = snake.head;
@@ -294,19 +294,19 @@ static void move_snake()
 
 	if (snake.direction == SNAKE_DIRECTION_TOP)
 	{
-		snake.head->curr_pos[1] -= 1;
+		snake.head->curr_pos.y -= 1;
 	}
 	else if (snake.direction == SNAKE_DIRECTION_BOTTOM)
 	{
-		snake.head->curr_pos[1] += 1;
+		snake.head->curr_pos.y += 1;
 	}
 	else if (snake.direction == SNAKE_DIRECTION_LEFT)
 	{
-		snake.head->curr_pos[0] -= 1;
+		snake.head->curr_pos.x -= 1;
 	}
 	else if (snake.direction == SNAKE_DIRECTION_RIGHT)
 	{
-		snake.head->curr_pos[0] += 1;
+		snake.head->curr_pos.x += 1;
 	}
 }
 
@@ -325,7 +325,7 @@ static void update_fruit_pool(void)
 			if (fruit->elapsed_time > fruit->lifetime)
 			{
 				fruit->status = FRUIT_STATUS_IDLE;
-				board_cell_pool_add(fruit->pos[0], fruit->pos[1]);
+				board_cell_pool_add(fruit->pos.x, fruit->pos.y);
 			}
 		}
 		else if (fruit->status == FRUIT_STATUS_IDLE && fruit_pool.elapsed_time > fruit_pool.rand_time_to_activate_fruit)
@@ -345,10 +345,10 @@ static void update_fruit_pool(void)
 				uint16_t index = rand() % available_cells_length;
 				vec2_t	*cell  = (board_cell_pool.cells + index);
 
-				fruit->pos[0] = (*cell)[0];
-				fruit->pos[1] = (*cell)[1];
+				fruit->pos.x = (*cell).x;
+				fruit->pos.y = (*cell).y;
 
-				board_cell_pool_remove((*cell)[0], (*cell)[1]);
+				board_cell_pool_remove((*cell).x, (*cell).y);
 			}
 		}
 	}
@@ -356,18 +356,18 @@ static void update_fruit_pool(void)
 
 static void check_eaten_fruits(void)
 {
-	uint8_t head_x = snake.head->curr_pos[0] * 2;
-	uint8_t head_y = snake.head->curr_pos[1];
-	uint8_t tail_x = snake.tail->prev_pos[0] * 2;
-	uint8_t tail_y = snake.tail->prev_pos[1];
+	uint8_t head_x = snake.head->curr_pos.x * 2;
+	uint8_t head_y = snake.head->curr_pos.y;
+	uint8_t tail_x = snake.tail->prev_pos.x * 2;
+	uint8_t tail_y = snake.tail->prev_pos.y;
 
 	for (uint8_t i = 0; i < fruit_pool.length; i++)
 	{
 		fruit_t *fruit = &fruit_pool.fruits[i];
 
 		if (fruit->status == FRUIT_STATUS_ACTIVE &&
-			(head_x == fruit->pos[0] || (head_x + 1) == fruit->pos[0]) &&
-			head_y == fruit->pos[1])
+			(head_x == fruit->pos.x || (head_x + 1) == fruit->pos.x) &&
+			head_y == fruit->pos.y)
 		{
 			fruit->status = FRUIT_STATUS_EATEN;
 			g_score.current += points_fruit_eaten;
@@ -378,12 +378,12 @@ static void check_eaten_fruits(void)
 			}
 		}
 		else if (fruit->status == FRUIT_STATUS_EATEN &&
-				 (tail_x == fruit->pos[0] || (tail_x + 1) == fruit->pos[0]) &&
-				 tail_y == fruit->pos[1])
+				 (tail_x == fruit->pos.x || (tail_x + 1) == fruit->pos.x) &&
+				 tail_y == fruit->pos.y)
 		{
 			snake_node_t *next_node = (snake.first_node + snake.length);
-			next_node->curr_pos[0]	= snake.tail->prev_pos[0];
-			next_node->curr_pos[1]	= snake.tail->prev_pos[1];
+			next_node->curr_pos.x	= snake.tail->prev_pos.x;
+			next_node->curr_pos.y	= snake.tail->prev_pos.y;
 
 			snake.tail->next_node = next_node;
 			next_node->prev_node  = snake.tail;
@@ -397,8 +397,8 @@ static void check_eaten_fruits(void)
 
 static void check_collision()
 {
-	uint8_t head_x = snake.head->curr_pos[0];
-	uint8_t head_y = snake.head->curr_pos[1];
+	uint8_t head_x = snake.head->curr_pos.x;
+	uint8_t head_y = snake.head->curr_pos.y;
 
 	snake.collided = head_x <= 0 ||
 					 head_x >= (win_board_height - 1) ||
@@ -422,8 +422,8 @@ static void board_cell_pool_add(uint8_t x, uint8_t y)
 	uint16_t available_cells_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
 	vec2_t	*cell					= (board_cell_pool.cells + available_cells_length - 1);
 
-	(*cell)[0] = x;
-	(*cell)[1] = y;
+	(*cell).x = x;
+	(*cell).y = y;
 }
 
 static void board_cell_pool_remove(uint8_t x, uint8_t y)
@@ -448,8 +448,8 @@ static void board_cell_pool_remove(uint8_t x, uint8_t y)
 	vec2_t	*cell_origin			= (board_cell_pool.cells + available_cells_length - 1);
 	vec2_t	*cell_dest				= (board_cell_pool.cells + index);
 
-	(*cell_dest)[0] = (*cell_origin)[0];
-	(*cell_dest)[1] = (*cell_origin)[1];
+	(*cell_dest).x = (*cell_origin).x;
+	(*cell_dest).y = (*cell_origin).y;
 	sparse_set_remove(&board_cell_pool.indexes, coord_index);
 }
 
@@ -485,19 +485,19 @@ static void render_snake(void)
 	// tonge
 	if (snake.direction == SNAKE_DIRECTION_TOP)
 	{
-		mvwaddch(win_board, node_aux->curr_pos[1] - 1, node_aux->curr_pos[0] * 2 + 1, snake.tonge_ch);
+		mvwaddch(win_board, node_aux->curr_pos.y - 1, node_aux->curr_pos.x * 2 + 1, snake.tonge_ch);
 	}
 	else if (snake.direction == SNAKE_DIRECTION_BOTTOM)
 	{
-		mvwaddch(win_board, node_aux->curr_pos[1] + 1, node_aux->curr_pos[0] * 2, snake.tonge_ch);
+		mvwaddch(win_board, node_aux->curr_pos.y + 1, node_aux->curr_pos.x * 2, snake.tonge_ch);
 	}
 	else if (snake.direction == SNAKE_DIRECTION_LEFT || snake.direction == SNAKE_DIRECTION_IDLE)
 	{
-		mvwaddch(win_board, node_aux->curr_pos[1], node_aux->curr_pos[0] * 2 - 1, snake.tonge_ch);
+		mvwaddch(win_board, node_aux->curr_pos.y, node_aux->curr_pos.x * 2 - 1, snake.tonge_ch);
 	}
 	else if (snake.direction == SNAKE_DIRECTION_RIGHT)
 	{
-		mvwaddch(win_board, node_aux->curr_pos[1], node_aux->curr_pos[0] * 2 + 2, snake.tonge_ch);
+		mvwaddch(win_board, node_aux->curr_pos.y, node_aux->curr_pos.x * 2 + 2, snake.tonge_ch);
 	}
 
 	wattroff(win_board, COLOR_PAIR(COLOR_PAIR_RED));
@@ -508,8 +508,8 @@ static void render_snake(void)
 	// body
 	while (node_aux)
 	{
-		mvwaddch(win_board, node_aux->curr_pos[1], node_aux->curr_pos[0] * 2, CH_SHAPE_FILL);
-		mvwaddch(win_board, node_aux->curr_pos[1], (node_aux->curr_pos[0] * 2) + 1, CH_SHAPE_FILL);
+		mvwaddch(win_board, node_aux->curr_pos.y, node_aux->curr_pos.x * 2, CH_SHAPE_FILL);
+		mvwaddch(win_board, node_aux->curr_pos.y, (node_aux->curr_pos.x * 2) + 1, CH_SHAPE_FILL);
 		node_aux = node_aux->next_node;
 	}
 
@@ -524,7 +524,7 @@ static void render_fruits(void)
 
 		if (fruit.status == FRUIT_STATUS_ACTIVE)
 		{
-			mvwaddch(win_board, fruit.pos[1], fruit.pos[0], ACS_DIAMOND);
+			mvwaddch(win_board, fruit.pos.y, fruit.pos.x, ACS_DIAMOND);
 		}
 	}
 }
