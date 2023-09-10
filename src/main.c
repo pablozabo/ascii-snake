@@ -18,7 +18,8 @@ typedef enum screen_t
 // #GLOBAL VARIABLES
 bool			g_running = true;
 int				g_key;
-const float32_t g_target_frame_time = 1000 / 30; // 30 FPS
+const float32_t g_target_frame_time = 1000 / 20; // 20 FPS
+float32_t		g_delta_time		= 0;
 char		   *g_asset_splash		= NULL;
 char		   *g_asset_game_over	= NULL;
 score_t			g_score				= { .current = 0 };
@@ -63,7 +64,7 @@ static void init(void)
 	curs_set(0);
 	nodelay(stdscr, TRUE);
 	keypad(stdscr, TRUE);
-	timeout(5);
+	// timeout(5);
 	resize_term(TERMINAL_ROWS, TERMINAL_COLS);
 	start_color();
 
@@ -120,12 +121,12 @@ static void loop(void)
 			}
 		}
 
-		float32_t real_delta_time = CURRENT_TIME - last_update_time;
-		last_update_time += real_delta_time;
+		g_delta_time = CURRENT_TIME - last_update_time;
+		last_update_time += g_delta_time;
 
-		if (real_delta_time < g_target_frame_time)
+		if (g_delta_time < g_target_frame_time)
 		{
-			custom_delay(g_target_frame_time - real_delta_time);
+			napms(g_target_frame_time - g_delta_time);
 		}
 
 		update_state();

@@ -1,10 +1,10 @@
 #include "screen_result.h"
 #include "../common.h"
 
-extern int			   g_key;
-extern const float32_t g_target_frame_time;
-extern char			  *g_asset_game_over;
-extern score_t		   g_score;
+extern int		 g_key;
+extern float32_t g_delta_time;
+extern char		*g_asset_game_over;
+extern score_t	 g_score;
 
 static const uint8_t win_game_over_width   = 60;
 static const uint8_t win_game_over_height  = 6;
@@ -16,18 +16,18 @@ static const uint8_t win_play_again_height = 3;
 static const uint8_t game_over_char_width	   = 6;
 static const uint8_t game_over_char_height	   = 4;
 static const uint8_t game_over_length		   = 9;
-static const uint8_t game_over_animation_speed = 100;
+static const uint8_t game_over_animation_speed = 150;
 
 static WINDOW *win_game_over;
 static WINDOW *win_new_record;
 static WINDOW *win_play_again;
 
-static bool		key_enter_pressed		   = false;
-static bool		render_play_again_label	   = true;
-static uint32_t elapsed_time			   = 0;
-static uint32_t record_points			   = 0;
-static uint32_t record_points_velocity	   = 0;
-static uint32_t record_points_acceleration = 1;
+static bool		 key_enter_pressed			= false;
+static bool		 render_play_again_label	= true;
+static uint32_t	 elapsed_time				= 0;
+static float32_t record_points				= 0;
+static float32_t record_points_velocity		= 0;
+static float32_t record_points_acceleration = 0.5;
 
 static uint8_t game_over_current_char_index		= 0;
 static uint8_t game_over_current_char_step		= 1;
@@ -82,9 +82,9 @@ bool screen_result_is_completed(void)
 
 void screen_result_update(void)
 {
-	elapsed_time += g_target_frame_time;
+	elapsed_time += g_delta_time;
 	key_enter_pressed		= key_enter_pressed || g_key == CH_ENTER;
-	render_play_again_label = (uint32_t)(QUARTER_SECONDS(elapsed_time)) % 2;
+	render_play_again_label = (uint32_t)(SECONDS(elapsed_time)) % 2;
 
 	game_over_current_char_index	 = ((uint32_t)(elapsed_time / game_over_animation_speed)) % 9;
 	game_over_current_char_direction = game_over_current_char_index % 2 ? -1 : 1;
@@ -166,7 +166,7 @@ static void render_new_record(void)
 	char	record[30] = { '\0' };
 	wclear(win_new_record);
 
-	sprintf(record, "New record! %d", record_points);
+	sprintf(record, "New record! %d", (uint32_t)record_points);
 	offset_x = (win_new_record_width - 12) * 0.5;
 
 	wattron(win_new_record, COLOR_PAIR(COLOR_PAIR_GREEN));

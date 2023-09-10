@@ -1,9 +1,9 @@
 #include "screen_init.h"
 #include "../common.h"
 
-extern char			  *g_asset_splash;
-extern int			   g_key;
-extern const float32_t g_target_frame_time;
+extern char		*g_asset_splash;
+extern int		 g_key;
+extern float32_t g_delta_time;
 
 #define ASSET_SPLASH_SNAKE_ROWS 9
 
@@ -54,9 +54,9 @@ bool screen_init_is_completed(void)
 
 void screen_init_update(void)
 {
-	elapsed_time += g_target_frame_time;
+	elapsed_time += g_delta_time;
 	key_enter_pressed = key_enter_pressed || g_key == CH_ENTER;
-	print_label_start = !key_enter_pressed && (uint32_t)(QUARTER_SECONDS(elapsed_time)) % 2;
+	print_label_start = !key_enter_pressed && (uint32_t)(SECONDS(elapsed_time)) % 2;
 }
 
 void screen_init_render(void)

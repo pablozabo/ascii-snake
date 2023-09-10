@@ -19,15 +19,6 @@ void error_handler(const char *file, const char *function, int line, const char 
 	exit(1);
 }
 
-void custom_delay(float32_t ms)
-{
-	float32_t goal = CURRENT_TIME + ms;
-
-	while (goal > CURRENT_TIME)
-	{
-	}
-}
-
 void set_offset_yx(uint8_t height, uint8_t width, uint8_t *offset_y, uint8_t *offset_x)
 {
 	uint8_t rows, cols;

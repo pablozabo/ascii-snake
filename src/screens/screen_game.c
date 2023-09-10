@@ -2,9 +2,9 @@
 #include "../common.h"
 #include "../data_structures/data_structures.h"
 
-extern int			   g_key;
-extern score_t		   g_score;
-extern const float32_t g_target_frame_time;
+extern int		 g_key;
+extern score_t	 g_score;
+extern float32_t g_delta_time;
 
 #define COORDS_TO_INDEX(x, y) (win_board_height * y + x)
 #define SET_BOARD_CELL_VAL(x, y, val) (*(board_model + COORDS_TO_INDEX(x, y)) = val, val ? board_cell_pool_remove(x, y) : board_cell_pool_add(x, y))
@@ -148,7 +148,7 @@ void screen_game_init(void)
 
 	snake.direction				= SNAKE_DIRECTION_LEFT;
 	snake.tonge_ch				= CH_SNAKE_TONGE_LEFT;
-	snake.speed					= 400;
+	snake.speed					= 500;
 	snake.max_speed				= 50;
 	snake.acceleration			= 5;
 	snake.length				= 1;
@@ -206,20 +206,20 @@ void screen_game_dispose(void)
 
 bool screen_game_is_completed(void)
 {
-	return snake.collided && SECONDS(snake.collided_elapsed_time) > 2;
+	return snake.collided && SECONDS(snake.collided_elapsed_time) > 4;
 }
 
 void screen_game_update(void)
 {
 	if (snake.collided)
 	{
-		snake.collided_elapsed_time += g_target_frame_time;
+		snake.collided_elapsed_time += g_delta_time;
 		return;
 	}
 
 	handle_input();
 	update_fruit_pool();
-	snake.elapsed_time += g_target_frame_time;
+	snake.elapsed_time += g_delta_time;
 
 	if (snake.elapsed_time >= snake.speed)
 	{
@@ -312,7 +312,7 @@ static void move_snake()
 
 static void update_fruit_pool(void)
 {
-	fruit_pool.elapsed_time += g_target_frame_time;
+	fruit_pool.elapsed_time += g_delta_time;
 
 	for (uint8_t i = 0; i < fruit_pool.length; i++)
 	{
@@ -320,7 +320,7 @@ static void update_fruit_pool(void)
 
 		if (fruit->status == FRUIT_STATUS_ACTIVE)
 		{
-			fruit->elapsed_time += g_target_frame_time;
+			fruit->elapsed_time += g_delta_time;
 
 			if (fruit->elapsed_time > fruit->lifetime)
 			{
@@ -502,7 +502,7 @@ static void render_snake(void)
 
 	wattroff(win_board, COLOR_PAIR(COLOR_PAIR_RED));
 
-	uint8_t snake_color = snake.collided && (uint32_t)(QUARTER_SECONDS(snake.collided_elapsed_time)) % 2 ? COLOR_PAIR_RED : COLOR_PAIR_GREEN;
+	uint8_t snake_color = snake.collided && (uint32_t)(HALF_SECONDS(snake.collided_elapsed_time)) % 2 ? COLOR_PAIR_RED : COLOR_PAIR_GREEN;
 	wattron(win_board, COLOR_PAIR(snake_color));
 
 	// body
