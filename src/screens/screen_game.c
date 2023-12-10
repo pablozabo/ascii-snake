@@ -71,7 +71,7 @@ typedef struct fruit_pool_t
 	fruit_t *fruits;
 	uint32_t elapsed_time;
 	uint32_t rand_time_to_activate_fruit;
-	uint8_t	 length; // number of pool fruits
+	uint8_t	 length; // number of fruits
 } fruit_pool_t;
 
 // As fruits are placed randomly on board,
@@ -92,9 +92,8 @@ typedef struct board_cell_pool_t
 	vec2_t		*cells;
 } board_cell_pool_t;
 
-static const uint8_t win_board_height = 40;
-static const uint8_t win_board_width  = win_board_height * 2;
-// for fruits placement no too close to board edges
+static const uint8_t win_board_height  = 40;
+static const uint8_t win_board_width   = win_board_height * 2;
 static const uint8_t win_board_padding = 2;
 static const uint8_t win_score_width   = 80;
 static const uint8_t win_score_height  = 1;

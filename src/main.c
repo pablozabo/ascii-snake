@@ -68,15 +68,15 @@ static void init(void)
 	resize_term(TERMINAL_ROWS, TERMINAL_COLS);
 	start_color();
 
+	init_color(COLOR_RED, 1000, 0, 0);
+	init_color(COLOR_GREEN, 0, 700, 0);
+	init_color(COLOR_BLUE, 0, 0, 700);
+
 	init_pair(COLOR_PAIR_BLUE, COLOR_BLUE, COLOR_BLACK);
 	init_pair(COLOR_PAIR_BLUE_BK, COLOR_WHITE, COLOR_BLUE);
 	init_pair(COLOR_PAIR_RED, COLOR_RED, COLOR_BLACK);
 	init_pair(COLOR_PAIR_RED_BK, COLOR_WHITE, COLOR_RED);
 	init_pair(COLOR_PAIR_GREEN, COLOR_GREEN, COLOR_BLACK);
-
-	init_color(COLOR_RED, 1000, 0, 0);
-	init_color(COLOR_GREEN, 0, 700, 0);
-	init_color(COLOR_BLUE, 0, 0, 700);
 
 	refresh();
 }

@@ -85,8 +85,3 @@ df = $(TEMP_PATH)/$(*F)
 $(TEMP_PATH)/%.o: %.c
 	$(CC) -MM -MP -MT $(df).o -MT $(df).d $(CFLAGS) $(includes) $< > $(df).d
 	$(CC) -c $< $(CFLAGS) $(includes) -o $(df).o
-
-ifneq ($(MAKECMDGOALS),clean)
--include $(DEP_LIB_CSM)
--include $(DEP_TEST)
-endif
