@@ -13,10 +13,10 @@ static const uint8_t win_new_record_height = 3;
 static const uint8_t win_play_again_width  = 60;
 static const uint8_t win_play_again_height = 3;
 
-static const uint8_t game_over_char_width	   = 6;
-static const uint8_t game_over_char_height	   = 4;
-static const uint8_t game_over_length		   = 9;
-static const uint8_t game_over_animation_speed = 150;
+static const uint8_t   game_over_char_width		 = 6;
+static const uint8_t   game_over_char_height	 = 4;
+static const uint8_t   game_over_length			 = 9;
+static const float32_t game_over_animation_speed = 6;
 
 static WINDOW *win_game_over;
 static WINDOW *win_new_record;
@@ -24,7 +24,7 @@ static WINDOW *win_play_again;
 
 static bool		 key_enter_pressed			= false;
 static bool		 render_play_again_label	= true;
-static uint32_t	 elapsed_time				= 0;
+static float32_t elapsed_time				= 0;
 static float32_t record_points				= 0;
 static float32_t record_points_velocity		= 0;
 static float32_t record_points_acceleration = 0.5;
@@ -84,9 +84,9 @@ void screen_result_update(void)
 {
 	elapsed_time += g_delta_time;
 	key_enter_pressed		= key_enter_pressed || g_key == CH_ENTER;
-	render_play_again_label = (uint32_t)(SECONDS(elapsed_time)) % 2;
+	render_play_again_label = (uint32_t)(elapsed_time) % 2;
 
-	game_over_current_char_index	 = ((uint32_t)(elapsed_time / game_over_animation_speed)) % 9;
+	game_over_current_char_index	 = ((uint32_t)(elapsed_time * game_over_animation_speed)) % 9;
 	game_over_current_char_direction = game_over_current_char_index % 2 ? -1 : 1;
 
 	if (g_score.current >= g_score.record && record_points < g_score.current)

@@ -23,9 +23,6 @@ typedef bool (*screen_is_completed_t)(void);
 
 // DEFS
 #define CURRENT_TIME (1000.0 * clock() / CLOCKS_PER_SEC)
-#define SECONDS(ms) (ms / 1000.0)
-#define HALF_SECONDS(ms) (ms / 500.0)
-#define QUARTER_SECONDS(ms) (ms / 250.0)
 
 #define CH_SHAPE_FILL ACS_CKBOARD
 #define CH_EOL '\n'

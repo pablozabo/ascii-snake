@@ -13,11 +13,11 @@ static const uint8_t win_splash_height	= 17;
 static const uint8_t win_actions_width	= 20;
 static const uint8_t win_actions_height = 2;
 
-static WINDOW  *win_splash;
-static WINDOW  *win_actions;
-static bool		print_label_start = true;
-static bool		key_enter_pressed = false;
-static uint32_t elapsed_time	  = 0;
+static WINDOW	*win_splash;
+static WINDOW	*win_actions;
+static bool		 print_label_start = true;
+static bool		 key_enter_pressed = false;
+static float32_t elapsed_time	   = 0;
 
 static void render_splash(void);
 
@@ -56,7 +56,7 @@ void screen_init_update(void)
 {
 	elapsed_time += g_delta_time;
 	key_enter_pressed = key_enter_pressed || g_key == CH_ENTER;
-	print_label_start = !key_enter_pressed && (uint32_t)(SECONDS(elapsed_time)) % 2;
+	print_label_start = !key_enter_pressed && (uint32_t)(elapsed_time) % 2;
 }
 
 void screen_init_render(void)

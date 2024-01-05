@@ -16,13 +16,14 @@ typedef enum screen_t
 } screen_t;
 
 // #GLOBAL VARIABLES
-bool			g_running = true;
-int				g_key;
-const float32_t g_target_frame_time = 1000 / 20; // 20 FPS
-float32_t		g_delta_time		= 0;
-char		   *g_asset_splash		= NULL;
-char		   *g_asset_game_over	= NULL;
-score_t			g_score				= { .current = 0 };
+bool	  g_running = true;
+int		  g_key;
+float32_t g_delta_time		= 0;
+char	 *g_asset_splash	= NULL;
+char	 *g_asset_game_over = NULL;
+score_t	  g_score			= { .current = 0 };
+
+static const float32_t c_target_frame_time = 1000 / 20; // 20 FPS
 
 static screen_action_t		 screen_action_init			  = NULL;
 static screen_action_t		 screen_action_dispose		  = NULL;
@@ -121,13 +122,15 @@ static void loop(void)
 			}
 		}
 
-		g_delta_time = CURRENT_TIME - last_update_time;
-		last_update_time += g_delta_time;
+		float32_t real_delta_time = CURRENT_TIME - last_update_time;
+		last_update_time += real_delta_time;
 
-		if (g_delta_time < g_target_frame_time)
+		if (real_delta_time < c_target_frame_time)
 		{
-			napms(g_target_frame_time - g_delta_time);
+			napms(c_target_frame_time - real_delta_time);
 		}
+
+		g_delta_time = real_delta_time / 1000;
 
 		update_state();
 		screen_action_update();

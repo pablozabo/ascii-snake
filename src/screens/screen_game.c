@@ -41,11 +41,11 @@ typedef struct snake_t
 	snake_node_t	 *head;
 	snake_node_t	 *tail;
 	ch_snake_tonge_t  tonge_ch;
-	uint32_t		  elapsed_time;
-	uint32_t		  collided_elapsed_time;
-	uint16_t		  speed;
-	uint16_t		  max_speed;
-	uint16_t		  acceleration;
+	float32_t		  elapsed_time;
+	float32_t		  collided_elapsed_time;
+	float32_t		  speed;
+	float32_t		  max_speed;
+	float32_t		  acceleration;
 	uint8_t			  length; // number of active nodes
 	snake_direction_t direction;
 	bool			  collided;
@@ -61,17 +61,17 @@ typedef enum fruit_status_t
 typedef struct fruit_t
 {
 	vec2_t		   pos;
-	uint32_t	   lifetime;
-	uint32_t	   elapsed_time;
+	float32_t	   lifetime;
+	float32_t	   elapsed_time;
 	fruit_status_t status;
 } fruit_t;
 
 typedef struct fruit_pool_t
 {
-	fruit_t *fruits;
-	uint32_t elapsed_time;
-	uint32_t rand_time_to_activate_fruit;
-	uint8_t	 length; // number of fruits
+	fruit_t	 *fruits;
+	float32_t elapsed_time;
+	float32_t rand_time_to_activate_fruit;
+	uint8_t	  length; // number of fruits
 } fruit_pool_t;
 
 // As fruits are placed randomly on board,
@@ -98,19 +98,23 @@ static const uint8_t win_board_padding = 2;
 static const uint8_t win_score_width   = 80;
 static const uint8_t win_score_height  = 1;
 
+static const float32_t snake_speed_init			= 0.5;
+static const float32_t snake_speed_max			= 0.1;
+static const float32_t snake_speed_acceleration = 0.01;
+
+static const float32_t fruit_lifetime	  = 15;
+static const uint32_t  points_movement	  = 10;
+static const uint32_t  points_fruit_eaten = 50;
+
+static WINDOW *win_board;
+static WINDOW *win_score;
+
 static snake_t			 snake;
 static fruit_pool_t		 fruit_pool;
 static board_cell_pool_t board_cell_pool;
 // board_model is required to keep track which cells are filled
 // with snake body nodes and detect collisions quickly
 static bool *board_model = NULL;
-
-static const uint32_t fruit_lifetime	 = 1000 * 15;
-static const uint32_t points_movement	 = 10;
-static const uint32_t points_fruit_eaten = 50;
-
-static WINDOW *win_board;
-static WINDOW *win_score;
 
 static void handle_input(void);
 static void move_snake(void);
@@ -147,9 +151,9 @@ void screen_game_init(void)
 
 	snake.direction				= SNAKE_DIRECTION_LEFT;
 	snake.tonge_ch				= CH_SNAKE_TONGE_LEFT;
-	snake.speed					= 500;
-	snake.max_speed				= 50;
-	snake.acceleration			= 5;
+	snake.speed					= snake_speed_init;
+	snake.max_speed				= snake_speed_max;
+	snake.acceleration			= snake_speed_acceleration;
 	snake.length				= 1;
 	snake.collided				= false;
 	snake.collided_elapsed_time = 0;
@@ -205,7 +209,7 @@ void screen_game_dispose(void)
 
 bool screen_game_is_completed(void)
 {
-	return snake.collided && SECONDS(snake.collided_elapsed_time) > 4;
+	return snake.collided && snake.collided_elapsed_time > 4;
 }
 
 void screen_game_update(void)
@@ -334,7 +338,7 @@ static void update_fruit_pool(void)
 			fruit->lifetime			= fruit_lifetime;
 			fruit_pool.elapsed_time = 0;
 
-			fruit_pool.rand_time_to_activate_fruit = 3000 + rand() % 3000; // between 3 and 6 seconds;
+			fruit_pool.rand_time_to_activate_fruit = 3 + rand() % 3; // between 3 and 6 seconds;
 
 			// add the fruit in a free board cell
 			uint16_t available_cells_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
@@ -501,7 +505,7 @@ static void render_snake(void)
 
 	wattroff(win_board, COLOR_PAIR(COLOR_PAIR_RED));
 
-	uint8_t snake_color = snake.collided && (uint32_t)(HALF_SECONDS(snake.collided_elapsed_time)) % 2 ? COLOR_PAIR_RED : COLOR_PAIR_GREEN;
+	uint8_t snake_color = snake.collided && (uint32_t)(snake.collided_elapsed_time * 5) % 2 ? COLOR_PAIR_RED : COLOR_PAIR_GREEN;
 	wattron(win_board, COLOR_PAIR(snake_color));
 
 	// body

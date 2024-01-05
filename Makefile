@@ -16,6 +16,7 @@ ifeq ($(OS), Linux)
 	FixPath = $1
 	EXE_NAME = snake
 	EXTERNAL_LIB := -lncurses
+	includes :=	-Iinclude -Isrc/screens
 else ifeq ($(findstring MSYS_NT,$(OS)), MSYS_NT)
 	MKDIR = mkdir -p
 	SED = sed
@@ -25,13 +26,12 @@ else ifeq ($(findstring MSYS_NT,$(OS)), MSYS_NT)
 	FixPath = $(subst /,\,$1)
 	EXE_NAME = snake.exe
 	EXTERNAL_LIB := -Lexternal/pdcurses/lib -lpdcurses
+	includes :=	-Iinclude -Isrc/screens -Iexternal/pdcurses/include
 endif
 
 CC = gcc
 CFLAGS := -ggdb -Wall -std=c99 -Wextra -Wswitch-enum
 BUILD_PATH := build/debug
-
-includes :=	-Iinclude -Isrc/screens -Iexternal/pdcurses/include
 
 #build folders
 BIN_PATH := $(BUILD_PATH)/bin
