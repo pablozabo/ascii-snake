@@ -94,7 +94,7 @@ typedef struct board_cell_pool_t
 
 static const uint8_t win_board_height  = 40;
 static const uint8_t win_board_width   = win_board_height * 2;
-static const uint8_t win_board_padding = 2;
+static const uint8_t win_board_padding = 3;
 static const uint8_t win_score_width   = 80;
 static const uint8_t win_score_height  = 1;
 
