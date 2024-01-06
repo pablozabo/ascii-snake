@@ -29,10 +29,10 @@ typedef enum snake_direction_t
 
 typedef enum ch_snake_tonge_t
 {
-	CH_SNAKE_TONGE_LEFT	  = 211,
-	CH_SNAKE_TONGE_RIGHT  = 183,
-	CH_SNAKE_TONGE_TOP	  = 213,
-	CH_SNAKE_TONGE_BOTTOM = 190
+	CH_SNAKE_TONGE_LEFT	  = ACS_LLCORNER,
+	CH_SNAKE_TONGE_RIGHT  = ACS_URCORNER,
+	CH_SNAKE_TONGE_TOP	  = ACS_ULCORNER,
+	CH_SNAKE_TONGE_BOTTOM = ACS_LRCORNER
 } ch_snake_tonge_t;
 
 typedef struct snake_t
