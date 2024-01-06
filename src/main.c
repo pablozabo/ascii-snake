@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 199309L
 #include "common.h"
 #include "defs.h"
 #include "screens/screens.h"
