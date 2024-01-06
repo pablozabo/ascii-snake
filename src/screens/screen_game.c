@@ -100,6 +100,7 @@ static const float32_t snake_speed_max			= 0.1;
 static const float32_t snake_speed_acceleration = 0.01;
 
 static const float32_t fruit_lifetime	  = 15;
+static const uint8_t   fruit_pool_length  = 6;
 static const uint32_t  points_movement	  = 10;
 static const uint32_t  points_fruit_eaten = 50;
 
@@ -175,8 +176,8 @@ void screen_game_init(void)
 	}
 
 	// fruit pool init
-	fruit_pool.length = 6;
-	fruit_pool.fruits = calloc(sizeof(fruit_t), fruit_pool.length);
+	fruit_pool.length = fruit_pool_length;
+	fruit_pool.fruits = calloc(sizeof(fruit_t), fruit_pool_length);
 	ASSERT(fruit_pool.fruits);
 
 	snake.head->curr_pos.x = win_board_height * 0.5;
