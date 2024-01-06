@@ -32,14 +32,6 @@ typedef enum snake_direction_t
 	SNAKE_DIRECTION_BOTTOM = 4
 } snake_direction_t;
 
-// typedef enum
-// {
-// 	CH_SNAKE_TONGE_LEFT	  = ACS_LLCORNER,
-// 	CH_SNAKE_TONGE_RIGHT  = ACS_URCORNER,
-// 	CH_SNAKE_TONGE_TOP	  = ACS_ULCORNER,
-// 	CH_SNAKE_TONGE_BOTTOM = ACS_LRCORNER
-// } ch_snake_tonge_t;
-
 typedef struct snake_t
 {
 	snake_node_t	 *first_node;
