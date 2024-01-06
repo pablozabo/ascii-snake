@@ -10,6 +10,11 @@ extern float32_t g_delta_time;
 #define SET_BOARD_CELL_VAL(x, y, val) (*(board_model + COORDS_TO_INDEX(x, y)) = val, val ? board_cell_pool_remove(x, y) : board_cell_pool_add(x, y))
 #define GET_BOARD_CELL_VAL(x, y) (*(board_model + COORDS_TO_INDEX(x, y)))
 
+#define CH_SNAKE_TONGE_LEFT ACS_LLCORNER
+#define CH_SNAKE_TONGE_RIGHT ACS_URCORNER
+#define CH_SNAKE_TONGE_TOP ACS_ULCORNER
+#define CH_SNAKE_TONGE_BOTTOM ACS_LRCORNER
+
 typedef struct snake_node_t
 {
 	vec2_t				 curr_pos;
@@ -27,20 +32,20 @@ typedef enum snake_direction_t
 	SNAKE_DIRECTION_BOTTOM = 4
 } snake_direction_t;
 
-typedef enum ch_snake_tonge_t
-{
-	CH_SNAKE_TONGE_LEFT	  = ACS_LLCORNER,
-	CH_SNAKE_TONGE_RIGHT  = ACS_URCORNER,
-	CH_SNAKE_TONGE_TOP	  = ACS_ULCORNER,
-	CH_SNAKE_TONGE_BOTTOM = ACS_LRCORNER
-} ch_snake_tonge_t;
+// typedef enum
+// {
+// 	CH_SNAKE_TONGE_LEFT	  = ACS_LLCORNER,
+// 	CH_SNAKE_TONGE_RIGHT  = ACS_URCORNER,
+// 	CH_SNAKE_TONGE_TOP	  = ACS_ULCORNER,
+// 	CH_SNAKE_TONGE_BOTTOM = ACS_LRCORNER
+// } ch_snake_tonge_t;
 
 typedef struct snake_t
 {
 	snake_node_t	 *first_node;
 	snake_node_t	 *head;
 	snake_node_t	 *tail;
-	ch_snake_tonge_t  tonge_ch;
+	chtype			  tonge_ch;
 	float32_t		  elapsed_time;
 	float32_t		  collided_elapsed_time;
 	float32_t		  speed;

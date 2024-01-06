@@ -14,8 +14,6 @@
 // TYPES
 typedef float  float32_t;
 typedef double float64_t;
-typedef void (*screen_action_t)(void);
-typedef bool (*screen_is_completed_t)(void);
 
 // DEFS
 #define CH_SHAPE_FILL ACS_CKBOARD

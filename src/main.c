@@ -16,6 +16,9 @@ typedef enum screen_t
 	SCREEN_RESULT = 3
 } screen_t;
 
+typedef void (*screen_action_t)(void);
+typedef bool (*screen_is_completed_t)(void);
+
 // #GLOBAL VARIABLES
 bool	  g_running = true;
 int		  g_key;
