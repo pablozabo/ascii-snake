@@ -121,6 +121,7 @@ static void loop(void)
 			noecho();
 			cbreak();
 			curs_set(0);
+			refresh();
 
 			if (screen_action_window_resized)
 			{
@@ -172,7 +173,7 @@ static void update_state(void)
 		screen_action_update		 = &screen_game_update;
 		screen_action_render		 = &screen_game_render;
 		screen_is_completed			 = &screen_game_is_completed;
-		screen_action_window_resized = NULL;
+		screen_action_window_resized = &screen_game_window_resized;
 		screen_action_init();
 		current_screen = SCREEN_GAME;
 	}

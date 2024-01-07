@@ -245,6 +245,15 @@ void screen_game_render(void)
 	wrefresh(win_board);
 }
 
+void screen_init_window_resized(void)
+{
+	wclear(win_board);
+	render_board();
+	render_fruits();
+	render_snake();
+	wrefresh(win_board);
+}
+
 static void handle_input(void)
 {
 	if (g_key > 0)
