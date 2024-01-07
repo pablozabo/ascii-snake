@@ -126,7 +126,7 @@ static void render_board(void);
 static void render_snake(void);
 static void render_fruits(void);
 static void render_score(void);
-static bool board_cell_pool_has_zero_cells(void);
+// static bool board_cell_pool_has_zero_cells(void);
 
 void screen_game_init(void)
 {
@@ -160,7 +160,7 @@ void screen_game_init(void)
 
 	// board cell pool init
 	board_cell_pool.indexes = sparse_set_new(win_board_height * win_board_height);
-	board_cell_pool.cells	= malloc(sizeof(vec2_t) * win_board_height * win_board_height);
+	board_cell_pool.cells	= malloc(sizeof(vec2_t) * (win_board_height * win_board_height));
 	ASSERT(board_cell_pool.cells);
 
 	// fill available cells, avoiding board edges
@@ -170,13 +170,12 @@ void screen_game_init(void)
 		{
 			uint16_t index = COORDS_TO_INDEX(x, y);
 			sparse_set_add(&board_cell_pool.indexes, index);
-			vec2_t *cell = (board_cell_pool.cells + index);
-			(*cell).x	 = x;
-			(*cell).y	 = y;
+			uint16_t indexes_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
+			vec2_t	*cell			= (board_cell_pool.cells + indexes_length - 1);
+			(*cell).x				= x;
+			(*cell).y				= y;
 		}
 	}
-
-	bool has_zero_cells = board_cell_pool_has_zero_cells();
 
 	// fruit pool init
 	fruit_pool.length = fruit_pool_length;
@@ -355,7 +354,7 @@ static void update_fruit_pool(void)
 
 			if (available_cells_length)
 			{
-				uint16_t index = rand() % available_cells_length;
+				uint16_t index = rand() % (available_cells_length - 1);
 				vec2_t	*cell  = (board_cell_pool.cells + index);
 
 				fruit->pos.x = cell->x;
@@ -365,8 +364,6 @@ static void update_fruit_pool(void)
 			}
 		}
 	}
-
-	bool has_zero_cells = board_cell_pool_has_zero_cells();
 }
 
 static void check_eaten_fruits(void)
@@ -560,16 +557,16 @@ static void render_score(void)
 	wrefresh(win_score);
 }
 
-static bool board_cell_pool_has_zero_cells(void)
-{
-	bool	 result					= false;
-	uint16_t available_cells_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
+// static bool board_cell_pool_has_zero_cells(void)
+// {
+// 	bool	 result					= false;
+// 	uint16_t available_cells_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
 
-	for (uint16_t i = 0; i < available_cells_length && !result; i++)
-	{
-		vec2_t *cell = (board_cell_pool.cells + i);
-		result		 = cell->x == 0 || cell->y == 0;
-	}
+// 	for (uint16_t i = 0; i < available_cells_length && !result; i++)
+// 	{
+// 		vec2_t *cell = (board_cell_pool.cells + i);
+// 		result		 = cell->x <= 0 || cell->y <= 0;
+// 	}
 
-	return result;
-}
+// 	return result;
+// }
