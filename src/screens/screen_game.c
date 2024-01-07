@@ -89,10 +89,10 @@ typedef struct board_cell_pool_t
 	vec2_t		*cells;
 } board_cell_pool_t;
 
-static const uint8_t win_board_height  = 40;
+static const uint8_t win_board_height  = 20;
 static const uint8_t win_board_width   = win_board_height * 2;
-static const uint8_t win_board_padding = 3;
-static const uint8_t win_score_width   = 80;
+static const uint8_t win_board_padding = 2;
+static const uint8_t win_score_width   = win_board_width;
 static const uint8_t win_score_height  = 1;
 
 static const float32_t snake_speed_init			= 0.5;
@@ -345,7 +345,7 @@ static void update_fruit_pool(void)
 			fruit->lifetime			= fruit_lifetime;
 			fruit_pool.elapsed_time = 0;
 
-			fruit_pool.rand_time_to_activate_fruit = 3 + rand() % 3; // between 3 and 6 seconds;
+			fruit_pool.rand_time_to_activate_fruit = 2 + rand() % 4; // between 2 and 4 seconds;
 
 			// add the fruit in a free board cell
 			uint16_t available_cells_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
