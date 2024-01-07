@@ -35,8 +35,8 @@ typedef enum color_pair_t
 
 typedef struct vec2_t
 {
-	int8_t x;
-	int8_t y;
+	int16_t x;
+	int16_t y;
 } vec2_t;
 
 typedef struct score_t

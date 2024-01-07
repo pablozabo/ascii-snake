@@ -126,7 +126,6 @@ static void render_board(void);
 static void render_snake(void);
 static void render_fruits(void);
 static void render_score(void);
-static bool board_cell_pool_has_zero_cells(void);
 
 void screen_game_init(void)
 {
@@ -175,8 +174,6 @@ void screen_game_init(void)
 			(*cell).y	 = y;
 		}
 	}
-
-	bool has_zero_cells = board_cell_pool_has_zero_cells();
 
 	// fruit pool init
 	fruit_pool.length = fruit_pool_length;
@@ -365,8 +362,6 @@ static void update_fruit_pool(void)
 			}
 		}
 	}
-
-	bool has_zero_cells = board_cell_pool_has_zero_cells();
 }
 
 static void check_eaten_fruits(void)
@@ -558,18 +553,4 @@ static void render_score(void)
 	mvwprintw(win_score, 0, x - 1, "%s", current_score);
 
 	wrefresh(win_score);
-}
-
-static bool board_cell_pool_has_zero_cells(void)
-{
-	bool	 result					= false;
-	uint16_t available_cells_length = VECTOR_LENGTH(board_cell_pool.indexes.dense);
-
-	for (uint16_t i = 0; i < available_cells_length && !result; i++)
-	{
-		vec2_t *cell = (board_cell_pool.cells + i);
-		result		 = cell->x == 0 || cell->y == 0;
-	}
-
-	return result;
 }
