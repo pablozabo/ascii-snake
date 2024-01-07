@@ -121,7 +121,6 @@ static void loop(void)
 			noecho();
 			cbreak();
 			curs_set(0);
-			refresh();
 
 			if (screen_action_window_resized)
 			{

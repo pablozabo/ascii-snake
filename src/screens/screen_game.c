@@ -238,7 +238,7 @@ void screen_game_render(void)
 {
 	render_score();
 
-	wclear(win_board);
+	werase(win_board);
 	render_board();
 	render_fruits();
 	render_snake();
@@ -539,7 +539,7 @@ static void render_score(void)
 	sprintf(current_score, "Current score: %d", g_score.current);
 	uint8_t x = win_score_width - strlen(current_score);
 
-	wclear(win_score);
+	werase(win_score);
 	mvwprintw(win_score, 0, 1, "%s", max_score);
 	mvwprintw(win_score, 0, x - 1, "%s", current_score);
 

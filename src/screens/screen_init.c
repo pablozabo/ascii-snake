@@ -61,7 +61,7 @@ void screen_init_update(void)
 
 void screen_init_render(void)
 {
-	wclear(win_actions);
+	werase(win_actions);
 
 	if (print_label_start)
 	{

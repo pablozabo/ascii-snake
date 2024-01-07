@@ -125,7 +125,7 @@ static void render_game_over(void)
 		wy,
 		char_index = 0;
 
-	wclear(win_game_over);
+	werase(win_game_over);
 	wattron(win_game_over, COLOR_PAIR(COLOR_PAIR_RED));
 
 	offset_x = (win_game_over_width - 55) * 0.5;
@@ -179,7 +179,7 @@ static void render_new_record(void)
 static void render_play_again(void)
 {
 	uint8_t offset_x;
-	wclear(win_play_again);
+	werase(win_play_again);
 
 	if (render_play_again_label)
 	{
