@@ -245,7 +245,7 @@ void screen_game_render(void)
 	wrefresh(win_board);
 }
 
-void screen_init_window_resized(void)
+void screen_game_window_resized(void)
 {
 	wclear(win_board);
 	render_board();
