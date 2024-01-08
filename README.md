@@ -25,7 +25,7 @@ then open a terminal and execute the following steps:
 git clone https://github.com/pablozabo/ascii-snake && cd ascii-snake
 make
 cd build\debug\bin
-./snake.exe
+.\snake.exe
 ```
 
 ### Controls:
