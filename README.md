@@ -18,8 +18,13 @@ cd build/debug/bin
 
 ### Windows
 
-First download and install [mingw](https://www.mingw-w64.org/downloads/#w64devkit),
-then open a terminal and execute the following steps:
+First download and install [mingw](https://www.mingw-w64.org/downloads/#w64devkit).
+
+**NOTE:** there's a dependency to pdcurses library (ncureses port for Windows platform) that it's
+already compiled and located on `ascii-snake\external\pdcurses\lib` folder. You can also
+download the source code from `https://github.com/wmcbrine/PDCurses` and compile it.
+
+Finally open a terminal and execute the following steps:
 
 ```bash
 git clone https://github.com/pablozabo/ascii-snake && cd ascii-snake
