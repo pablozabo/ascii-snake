@@ -16,7 +16,7 @@ ifeq ($(OS), Linux)
 	FixPath = $1
 	EXE_NAME = snake
 	EXTERNAL_LIB := -lncurses
-	includes :=	-Iinclude -Isrc/screens
+	INCLUDES :=	-Iinclude -Isrc/screens
 else ifeq ($(findstring MSYS_NT,$(OS)), MSYS_NT)
 	MKDIR = mkdir -p
 	SED = sed
@@ -26,7 +26,7 @@ else ifeq ($(findstring MSYS_NT,$(OS)), MSYS_NT)
 	FixPath = $(subst /,\,$1)
 	EXE_NAME = snake.exe
 	EXTERNAL_LIB := -Lexternal/pdcurses/lib -lpdcurses
-	includes :=	-Iinclude -Isrc/screens -Iexternal/pdcurses/include
+	INCLUDES :=	-Iinclude -Isrc/screens -Iexternal/pdcurses/include
 endif
 
 CC = gcc
@@ -83,5 +83,5 @@ $(BUILD_PATH):
 df = $(TEMP_PATH)/$(*F)
 
 $(TEMP_PATH)/%.o: %.c
-	$(CC) -MM -MP -MT $(df).o -MT $(df).d $(CFLAGS) $(includes) $< > $(df).d
-	$(CC) -c $< $(CFLAGS) $(includes) -o $(df).o
+	$(CC) -MM -MP -MT $(df).o -MT $(df).d $(CFLAGS) $(INCLUDES) $< > $(df).d
+	$(CC) -c $< $(CFLAGS) $(INCLUDES) -o $(df).o
